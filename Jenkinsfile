@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'node:10-alpine'
+            image 'node:8-alpine'
             args '-p 3000:3000'
         }
     }
@@ -16,8 +16,13 @@ pipeline {
         }
         stage('Test') {
         	steps {
-        		sh 'npm test'
+        		sh 'npm fsdtest'
         	}
+        }
+    }
+    post {
+        success{
+        slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
     }
 }
